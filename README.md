@@ -18,7 +18,7 @@ Provide your hosts or host groups as an argument to parameter `inventory`.
 
 ### Extra parameters
 
-Some playbooks have extra parameters:
+Some playbooks expect extra parameters:
 
 - `update-system.yml`
 
