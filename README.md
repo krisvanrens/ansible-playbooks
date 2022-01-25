@@ -13,3 +13,8 @@ Run as follows:
 ```
 $ ansible-playbook playbook.yml --extra-vars "inventory=.."
 ```
+
+Some playbooks have extra parameters:
+
+- `update-system.yml`:
+  - `reboot_default=true|false`: Reboot the system after updating, regardless.

@@ -1,15 +1,39 @@
 ---
 
-- name: Update server packages
+- name: Update Ubuntu system packages
   hosts: "{{inventory}}"
   become: yes
 
   tasks:
 
-    - name: Update server packages
+    - name: Update general set of packages
       apt:
         name: "*"
         state: latest
         update_cache: yes
         autoclean: yes
         autoremove: yes
+
+    - name: Update OS packages
+      apt:
+        upgrade: dist
+        update_cache: yes
+
+    - name: Check APT reboot hint
+      stat:
+        path: /var/run/reboot-required
+      register: apt_reboot_hint
+
+    - name: Set fact reboot hint false
+      set_fact:
+        reboot_hint: false
+      when: reboot_default | bool and apt_reboot_hint.stat.exists == false
+
+    - name: Set fact reboot hint true
+      set_fact:
+        reboot_hint: true
+      when: reboot_default | bool and apt_reboot_hint.stat.exists == true
+
+    - name: Reboot
+      reboot:
+      when: reboot_default | bool and reboot_hint | bool
